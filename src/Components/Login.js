@@ -1,71 +1,84 @@
 import React, { Component } from "react";
-import ParkCar from "./ParkCar";
 import "./ParkCar.css";
 
-
+var that;
 class Login extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      defaultParked: '',
-      ParkingLength: "",
-      DefaultParkingError: "",
+      DefaultParked: '',
+      ParkingLength: '',
+      DefaultParkingError: '',
       ParkingLengthError:''
     };
+    that=this;
   }
   submithandler = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    e.preventDefault()
   };
 
   validForm = () => {
     var isValid = false;
-
-    if(this.state.ParkingLength===''){
-        alert('in if')
-this.setState({
-    ParkingLengthError:'please enter the valid number for slot length'
-})
-isValid=false;
-    }
-    else{
-        this.setState({
-            ParkingLengthError:''
-        })
-        isValid=true;
-    }
-    if (this.state.defaultParked > this.state.ParkingLength) {
+    if(this.state.ParkingLength==''){
       this.setState({
-        DefaultParkingError: "Parked cars count can not be greater than parking slot length",
+          ParkingLengthError:'please enter the valid number for slot length'
+      })
+      isValid=false;
+          }
+          else{
+            this.setState({
+              ParkingLengthError:''
+          })
+          isValid=true;
+          }
+    
+    if(Number(this.state.ParkingLength)<Number(this.state.DefaultParked )) {
+      console.log("parking size"+this.state.ParkingLength)
+      console.log("default"+this.state.DefaultParked)
+
+      alert('in if')
+
+      this.setState({
+        DefaultParkingError: "Parked cars count should not be greater than parking slot length",
+      
       });
+
       isValid = false;
     }
-    else{
-        this.setState({
-            DefaultParkingError:''
-        })
-        isValid=true;
-    }
+    
+    
+          else{
+              this.setState({
+                  DefaultParkingError:''
+              })
+              isValid=true;
+          }
     return isValid;
   };
 
   submitData = (e) => {
-      const isvalid= this.validForm();
-    //   alert(isvalid)
-// console.log(isvalid)
-      if(isvalid==true){
-        //   alert("data aaded")
+    e.preventDefault()
+
+
+    const isvalid= this.validForm();
+    alert(" i am from submit "+isvalid)
+
+      if(isvalid===true){
+alert(isvalid+"called from login")
+        that.props.history.push({pathname:'/main',state:{parkingSize:this.state.ParkingLength,DefaultParked:this.state.DefaultParked}})
+        // this.props.history.push('/main')
+      
       }
-      <ParkCar parkingSize={this.state.ParkingLength} defaultParked={this.state.defaultParked}/>
-      e.preventDefault()
-  };
+
+    };
 
   render() {
     return (
         <>
+        
         <header className="header shadow mt-2">
           <div class="header-content d-flex justify-content-center p-2">
             <div className="ml-5 align-self-center heading_n">
@@ -79,11 +92,11 @@ isValid=false;
           <div class="form-group">
             <label for="owner">No of Parking lots to be available:</label>
             <input
-              type="text"
+              type="number"
               class="form-control rounded-1 shadow-sm"
               name="ParkingLength"
               placeholder="Enter the count of total slots you want"
-              value={this.state.Parking_length}
+              value={this.state.ParkingLength}
               onChange={this.submithandler}
             />
           <span style={{ color: "red" }}> {this.state.ParkingLengthError}</span>
@@ -92,11 +105,11 @@ isValid=false;
           <div class="form-group">
             <label for="owner">Parked cars count:</label>
             <input
-              type="text"
+              type="number"
               class="form-control rounded-1 shadow-sm"
-              name="defaultParked"
+              name="DefaultParked"
               placeholder="How many cars are already parked"
-              value={this.state.defaultParked}
+              value={this.state.DefaultParked}
               onChange={this.submithandler}
             />
           </div>

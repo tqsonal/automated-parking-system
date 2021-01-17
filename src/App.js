@@ -1,14 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
-import ParkCar from './Components/ParkCar';
-import Login from './Components/Login';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import "./App.css";
+import Login from "./Components/Login";
+import ParkCar from "./Components/ParkCar.js";
+import React from 'react';
+import history from './Components/history';
+import { Router} from 'react-router-dom'
+
 
 function App() {
   return (
     <div className="App">
-     {/* <ChangeState/> */}
-     {/* <ParkCar/> */}
-     <Login/>
+    {/* <Router history={history}>  */}
+    <BrowserRouter> 
+        <Switch>
+          <Route exact path="/"  component={Login} />
+          <Route  path="/main"  component={ParkCar} />
+        </Switch>
+    </BrowserRouter>
+
     </div>
   );
 }

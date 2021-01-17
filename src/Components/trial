@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import car_pic from "../parking.svg";
-import AlotDefaultParking from "./AlotDefaultParking.js";
+import AlotDefaultParking from "./AlotDefaultParking";
 import "./ParkCar.css";
 class ParkCar extends Component {
   constructor(props) {
@@ -22,8 +22,7 @@ class ParkCar extends Component {
       refereshed_details:[],
       SearchItem:'',
       parkingSize:parkingSize,
-      defaultParked:defaultParked,
-      NodataError:''
+      defaultParked:defaultParked
     };
   }
 
@@ -94,9 +93,9 @@ class ParkCar extends Component {
     return isValid;
   };
 
-  dynamicSearch=(e)=>{
-
-console.log(e.target.value)
+  dynamicSearch(e){
+    // alert('alle')
+    // var arr=[]
     this.setState({
       SearchItem: e.target.value
     },()=>this.searchData());
@@ -112,31 +111,24 @@ this.renderCarParkedDeatil()
 }
 
 searchData=(e)=>{
-  if(this.state.SearchItem==null || this.state.SearchItem=='' || this.state.SearchItem==undefined){
-    let arr=JSON.parse(sessionStorage.getItem('car_parked'));
+  if(this.state.SearchItem==null){
+    var arr=JSON.parse(localStorage.getItem('car_parked'));
     this.setState({
       refereshed_details:arr
-
     })
   }
   else{
     let arr= this.state.refereshed_details.filter(a=>a.color.toLowerCase().includes(this.state.SearchItem))
-  // console.log("new array is "+arr)
-  if(arr=='' || arr==undefined || arr==null){
-    this.setState({
-      NodataError:'no data to display'
-    })
-  }
+  
     this.setState({
        refereshed_details:arr
-
      })
   }
   
    
 }
 submitData = (e) => {
-  var Parked_car_detail = JSON.parse(sessionStorage.getItem("car_parked"));
+  var Parked_car_detail = JSON.parse(localStorage.getItem("car_parked"));
 
   const validForm = this.validForm();
   console.log(validForm)
@@ -158,8 +150,8 @@ console.log("in if ")
     Parked_car_detail.push(car_detail);
     // Parked_car_detail.push({});
 
-    sessionStorage.setItem("car_parked", JSON.stringify(Parked_car_detail));
-    var Parked_car_detail_u = JSON.parse(sessionStorage.getItem("car_parked"));
+    localStorage.setItem("car_parked", JSON.stringify(Parked_car_detail));
+    var Parked_car_detail_u = JSON.parse(localStorage.getItem("car_parked"));
     this.setState({
       refereshed_details:Parked_car_detail_u
     })
@@ -168,11 +160,11 @@ console.log("in if ")
 console.log("in else if ")
   
  let cnt =true;
-for(let i = 1 ; i <= Parked_car_detail.length;i++){
+for(let i = 0 ; i < Parked_car_detail.length;i++){
   if(Parked_car_detail[i].isempty==true){
     car_detail = {
       isempty: false,
-      car_alotted: i,
+      car_alotted: i+1,
       ownerName: this.state.ownerName,
       carName: this.state.carName,
       numberPlate: this.state.numberPlate,
@@ -183,8 +175,8 @@ for(let i = 1 ; i <= Parked_car_detail.length;i++){
     cnt=false;
     Parked_car_detail[i]=car_detail;
 
-    sessionStorage.setItem("car_parked", JSON.stringify(Parked_car_detail));
-    var Parked_car_detail_u = JSON.parse(sessionStorage.getItem("car_parked"));
+    localStorage.setItem("car_parked", JSON.stringify(Parked_car_detail));
+    var Parked_car_detail_u = JSON.parse(localStorage.getItem("car_parked"));
     this.setState({
       refereshed_details:Parked_car_detail_u
     })
@@ -206,8 +198,8 @@ for(let i = 1 ; i <= Parked_car_detail.length;i++){
       time: new Date().toLocaleTimeString(),
     };
     Parked_car_detail.push(car_detail);
-    sessionStorage.setItem("car_parked", JSON.stringify(Parked_car_detail));
-    var Parked_car_detail_u = JSON.parse(sessionStorage.getItem("car_parked"));
+    localStorage.setItem("car_parked", JSON.stringify(Parked_car_detail));
+    var Parked_car_detail_u = JSON.parse(localStorage.getItem("car_parked"));
     this.setState({
       refereshed_details:Parked_car_detail_u
     })
@@ -220,7 +212,7 @@ e.preventDefault()
 }
   
   remove_car(i){
-    var Parked_car_detail = JSON.parse(sessionStorage.getItem("car_parked"));
+    var Parked_car_detail = JSON.parse(localStorage.getItem("car_parked"));
     var car_detail = {
       isempty: true,
       car_alotted: '',
@@ -232,8 +224,8 @@ e.preventDefault()
       time: '',
     };
     Parked_car_detail[i]=car_detail
-    sessionStorage.setItem("car_parked", JSON.stringify(Parked_car_detail));
-    var Parked_car_detail = JSON.parse(sessionStorage.getItem("car_parked"));
+    localStorage.setItem("car_parked", JSON.stringify(Parked_car_detail));
+    var Parked_car_detail = JSON.parse(localStorage.getItem("car_parked"));
 
       this.setState({
         refereshed_details:Parked_car_detail
@@ -243,16 +235,7 @@ e.preventDefault()
 
   }
 
-  componentWillMount(){
-    var arr = JSON.parse(sessionStorage.getItem("car_parked"));
-    if(arr==null){
-      arr=[]
-      this.setState({
-        refereshed_details:[]
-      })
-    }
-
-  }
+  
   componentDidMount() {
     // console.log(this.state.entryDate);
     // console.log(this.props.location.state)
@@ -262,7 +245,7 @@ e.preventDefault()
     var mm = String(today.getMonth() + 1).padStart(2, "0");
     var yyyy = today.getFullYear();
     today = yyyy + "-" + mm + "-" + dd;
-      var Parked_car_detail = JSON.parse(sessionStorage.getItem("car_parked"));
+      var Parked_car_detail = JSON.parse(localStorage.getItem("car_parked"));
       if(Parked_car_detail==null){
         Parked_car_detail=[]
       }
@@ -273,15 +256,12 @@ this.setState({
   }
   renderCarParkedDeatil = () => {
     // alert("renderCarParkedDeatil called")
-    var Parked_car_detail = JSON.parse(sessionStorage.getItem("car_parked"));
+    var Parked_car_detail = JSON.parse(localStorage.getItem("car_parked"));
   
     if (Parked_car_detail == null) {
       Parked_car_detail = [];
     }
-    var i=1;
     return this.state.refereshed_details.map((parking_detail, index) => {
-        
-
       // console.log(Parked_car_detail)
       const {car_alotted,color,entryDate,carName,numberPlate,ownerName,time,isempty} = parking_detail;
       var n=new Date(entryDate)
@@ -294,7 +274,7 @@ this.setState({
       return (
         
         <tr key={index}>
-          <td>{i++} </td>
+          <td>{index + 1} </td>
 
           <td>{ownerName}</td>
           <td>{carName}</td>
@@ -310,20 +290,15 @@ this.setState({
           </td>
         </tr>
       );
-
       }
+    });
 
-    }
-
-    );
   };
 
   render() {
-    console.log("called")
     return (
       <div>
 <AlotDefaultParking obj={this.props.location.state}/>
-{/* <AlotDefaultParking /> */}
 
         <header class="shadow" className="header">
           <div class="header-content d-flex justify-content-center p-2">
@@ -448,10 +423,7 @@ this.setState({
                   <th>Actions</th>
                 </tr>
               </thead>
-              
-              {
-                this.state.NodataError!=''?<tbody><tr ><th colspan="9">{this.state.NodataError}</th></tr></tbody>:<tbody>{this.renderCarParkedDeatil()}</tbody>
-              }
+              <tbody>{this.renderCarParkedDeatil()}</tbody>
             </table>
           </div>
 

@@ -1,12 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import App from './App.js';
+import Login from './Components/Login';
+import ParkCar from './Components/ParkCar';
+import AlotDefaultParking from './Components/AlotDefaultParking';
+
+
+// import AlotDefaultParking from './Components/AlotDefaultParking';
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );
