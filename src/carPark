@@ -443,9 +443,9 @@ this.setState({
             {/* <div className='row'> */}
             <form>
               <div className='form-group'>          
-                  <input type="text" className='form-control mb-2' name='SearchItem' value={this.state.SearchItem} onChange={(e)=>this.dynamicSearch(e)} placeholder="Search for car color"></input>
+                  {/* <input type="text" className='form-control mb-2' name='SearchItem' value={this.state.SearchItem} onChange={(e)=>this.dynamicSearch(e)} placeholder="Search for car color"></input> */}
            
-                  {/* <div class="col-12 form-group">
+                  <div class="col-12 form-group">
                 <select
                   class="form-control rounded-1 shadow-sm"
                   name="color"
@@ -455,8 +455,9 @@ this.setState({
                   <option value="red"> Red </option>
                   <option value="black"> Black </option>
                   <option value="white"> White </option>
+                  {/* <option value="Other"> Other </option> */}
                 </select>
-              </div> */}
+              </div>
            
             </div>
             </form>

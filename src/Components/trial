@@ -96,54 +96,37 @@ class ParkCar extends Component {
 
   dynamicSearch=(e)=>{
 
-
+console.log(e.target.value)
     this.setState({
-      SearchItem: e.target.value,
-      NodataError:''
+      SearchItem: e.target.value
     },()=>this.searchData());
-  
 
     // this.renderCarParkedDeatil() 
 }
 
 searchData=()=>{
   // e.preventDefault();
-  console.log(this.state.SearchItem+" ")
-
-  let arr=JSON.parse(sessionStorage.getItem('car_parked'));
-  // console.log("start array")
-// console.log(arr)
-  if(this.state.SearchItem=="default")
-  {
+  if(this.state.SearchItem==null || this.state.SearchItem=='' || this.state.SearchItem==undefined){
+    let arr=JSON.parse(sessionStorage.getItem('car_parked'));
     this.setState({
-      refereshed_details:arr,
-      NodataError:''
-    })
-  }
-  else{
-    let temparr= arr.filter(a=>a.color.toLowerCase().includes(this.state.SearchItem))
-    // console.log("temp array")
-    // console.log(temparr)
-  // let arr_updated=JSON.parse(sessionStorage.getItem('car_parked'));
-  if(temparr.length==0){
-    this.setState({
-      NodataError:'no data to display'
+      refereshed_details:arr
 
     })
   }
   else{
+    let arr= this.state.refereshed_details.filter(a=>a.color.toLowerCase().includes(this.state.SearchItem))
+  // console.log("new array is "+arr)
+  let arr_updated=JSON.parse(sessionStorage.getItem('car_parked'));
+  this.setState({
+    refereshed_details:arr
+
+  })
+
+  if(arr=='' || arr==undefined || arr==null ){
     this.setState({
-      refereshed_details:temparr
+      NodataError:'no data to display',
     })
   }
- 
-
-
-  // if(this.state.SearchItem=='default'){
-  //   this.setState({
-  //     NodataError:'no data to display',
-  //   })
-  // }
    
   }
   
@@ -444,20 +427,6 @@ this.setState({
             <form>
               <div className='form-group'>          
                   <input type="text" className='form-control mb-2' name='SearchItem' value={this.state.SearchItem} onChange={(e)=>this.dynamicSearch(e)} placeholder="Search for car color"></input>
-           
-                  {/* <div class="col-12 form-group">
-                <select
-                  class="form-control rounded-1 shadow-sm"
-                  name="color"
-                  onChange={this.dynamicSearch}
-                >
-                  <option value="default"> select car color </option>
-                  <option value="red"> Red </option>
-                  <option value="black"> Black </option>
-                  <option value="white"> White </option>
-                </select>
-              </div> */}
-           
             </div>
             </form>
             {/* </div> */}

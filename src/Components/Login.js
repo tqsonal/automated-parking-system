@@ -36,10 +36,10 @@ class Login extends Component {
           }
     
     if(Number(this.state.ParkingLength)<Number(this.state.DefaultParked )) {
-      console.log("parking size"+this.state.ParkingLength)
-      console.log("default"+this.state.DefaultParked)
+      // console.log("parking size"+this.state.ParkingLength)
+      // console.log("default"+this.state.DefaultParked)
 
-      alert('in if')
+      // alert('in if')
 
       this.setState({
         DefaultParkingError: "Parked cars count should not be greater than parking slot length",
@@ -64,10 +64,10 @@ class Login extends Component {
 
 
     const isvalid= this.validForm();
-    alert(" i am from submit "+isvalid)
+    // alert(" i am from submit "+isvalid)
 
       if(isvalid===true){
-alert(isvalid+"called from login")
+// alert(isvalid+"called from login")
         that.props.history.push({pathname:'/main',state:{parkingSize:this.state.ParkingLength,DefaultParked:this.state.DefaultParked}})
         // this.props.history.push('/main')
       
