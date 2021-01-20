@@ -37,7 +37,7 @@ class AlotDefaultParking extends Component {
   dynamicNoplate = () => {
     var two = Math.floor(Math.random() * 50);
 
-    var n = Math.floor(Math.random() * (88 - 65 + 1)) + 65;
+    var n = Math.floor(Math.random() * (88- 65 + 1)) + 65;
 
     var three = String.fromCharCode(n);
     var four = String.fromCharCode(n + Math.floor(Math.random() * 3));
@@ -93,8 +93,8 @@ class AlotDefaultParking extends Component {
       }
 
       for (let i = 0; i < arr.length; i++) {
-        let n = Math.floor(
-          Math.random() * (this.state.parkingSize - 0) + 1);
+        // let n = Math.floor(
+        //   Math.random() * (this.state.parkingSize - 0) + 1);
         for (let j = 0; j < random_no.length; j++) {
           if (i == random_no[j]) {
             
@@ -109,16 +109,15 @@ class AlotDefaultParking extends Component {
             var color_length = Math.floor(
               Math.random() * this.state.color_arr.length
             );
-            var color = this.state.color_arr[color_length];
             var noPlate = this.dynamicNoplate();
             var car_detail = {
               isempty: false,
-              car_alotted: random_no[j],
+              car_alotted: i+1,
               ownerName: this.state.names[name_random],
               carName: this.state.carName[car_name_random],
               numberPlate: noPlate,
               entryDate: new Date().toLocaleDateString(),
-              color: color,
+              color: this.state.color_arr[color_length],
               time: new Date().toLocaleTimeString(),
             };
             arr[i] = car_detail;

@@ -5,19 +5,28 @@ import "./ParkCar.css";
 class ParkCar extends Component {
   constructor(props) {
     super(props);
-    const {parkingSize,defaultParked}=this.props
+    const {parkingSize,defaultParked}=this.props.history.location.state;
+
+console.log(parkingSize)
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, "0");
+    var mm = String(today.getMonth() + 1).padStart(2, "0");
+    var yyyy = today.getFullYear();
+    today = mm + "-" + dd + "-" + yyyy;
+
+
     this.state = {
       ownerName: "sonal",
-      carName: "alto",
-      numberPlate: "MH-15-BD-5656",
+      carName: "swift",
+      numberPlate: "MH-12-BF-2020",
       entryDate: new Date(),
-      curDate: "",
+      curDate: '',
       NameError: "",
       carError: "",
       numberPlateError: "",
       DateError: "",
       car_alotted: 0,
-      color: "default",
+      color: "",
       carColorError: "",
       refereshed_details:[],
       SearchItem:'',
@@ -25,10 +34,11 @@ class ParkCar extends Component {
       defaultParked:defaultParked,
       NodataError:''
     };
+    console.log(this.state.parkingSize)
   }
 
   submithandler = (e) => {
-    // console.log("called")
+    console.log("called")
     const value =
       e.target.name == "numberPlate"
         ? e.target.value.toUpperCase()
@@ -42,12 +52,15 @@ class ParkCar extends Component {
     var isValid = true;
     // alert("submitData called")
 
-    if (this.state.ownerName.length === 0) {
-      this.setState({ NameError: "Owner Name Should Not Be Blank" });
+    if (this.state.ownerName.length == 0) {
+      this.setState({ NameError: "Owner Name Should Not Be Blank" ,
+     
+    });
       isValid = false;
     } else if (this.state.ownerName.length <= 1) {
       this.setState({
-        NameError: "Owner Name Should be greater than 1 character",
+        NameError: "Owner Name Should be greater than atleast 1 character",
+     
       });
       isValid = false;
     } else if (this.state.ownerName.length > 0) {
@@ -55,41 +68,58 @@ class ParkCar extends Component {
       isValid = true;
     }
     if (this.state.carName.length === 0) {
-      this.setState({ carError: "Car Name Should Not Be Blank" });
+      this.setState({ carError: "Car Name Should Not Be Blank",
+          });
       isValid = false;
     } else if (this.state.carName.length <= 1) {
       this.setState({
         carError: "Car Name Should be greater than 1 character",
+     
       });
       isValid = false;
     } else if (this.state.carName.length > 0) {
       this.setState({ carError: "" });
       isValid = true;
     }
+
+
     if (
-      !this.state.numberPlate.match(
-        /^[a-zA-Z]{1,3}-[0-9]{2}-[a-zA-Z]{1,2}-[0-9]{1,4}/
+      this.state.numberPlate.match(
+        '[a-zA-Z]{2}-[0-9]{2}-[a-zA-Z]{2}-[0-9]{1,4}'
       )
+
     ) {
-      this.setState({
-        numberPlateError: "Entered car number plate is not valid",
-      });
-      isValid = false;
-    } else {
+      // console.log(!this.state.numberPlate.match('[a-zA-Z]{2}-[0-9]{2}-[a-zA-Z]{2}-[0-9]{1,4}'))
+      
+
       this.setState({ numberPlateError: "" });
       isValid = true;
-    }
-    if (this.state.color == "default") {
+      console.log("if of pattern called"+isValid);
+      
+    } 
+    else
+     {
       this.setState({
-        carColorError: "Please entere valid car color",
+        numberPlateError: "Entered car number plate is not valid",
+
       });
       isValid = false;
-    } else {
-      this.setState({
-        carColorError: "",
-      });
-      isValid = true;
+      console.log(isValid)
+     
     }
+   
+ if (this.state.color == "" || this.state.color==undefined ) {
+  this.setState({
+    carColorError: "Please entere valid car color",
+       
+  });
+  isValid = false;
+} else {
+  this.setState({
+    carColorError: ""
+  });
+  isValid = true;
+}
    
     return isValid;
   };
@@ -108,7 +138,7 @@ class ParkCar extends Component {
 
 searchData=()=>{
   // e.preventDefault();
-  console.log(this.state.SearchItem+" ")
+  // console.log(this.state.SearchItem+" ")
 
   let arr=JSON.parse(sessionStorage.getItem('car_parked'));
   // console.log("start array")
@@ -150,15 +180,26 @@ searchData=()=>{
    
 }
 submitData = (e) => {
+  e.preventDefault()
   var Parked_car_detail = JSON.parse(sessionStorage.getItem("car_parked"));
-
+console.log(Parked_car_detail.length)
+console.log("parking size" +this.state.parkingSize)
   const validForm = this.validForm();
-  // console.log(validForm)
+  console.log(validForm)
   var car_detail={} ;
+
+  var OccupiedSlots= Parked_car_detail.filter((a)=>a.isempty==true)
+  console.log(OccupiedSlots.length)
+
+if(OccupiedSlots.length==0){
+  alert("parking is full")
+}
+else{
+
 
   if(Parked_car_detail==null && validForm==true){
     Parked_car_detail=[]
-// console.log("in if ")
+console.log("in if ")
     car_detail = {
       isempty: false,
       car_alotted: 1,
@@ -177,16 +218,26 @@ submitData = (e) => {
     this.setState({
       refereshed_details:Parked_car_detail_u
     })
+    this.setState({
+      ownerName: "",
+          carName: "",
+          numberPlate: "",
+          color: '',
+          SearchItem:'',
+          entryDate:this.state.entryDate
+
+    
+    })
  }
  else if(Parked_car_detail.length>0 && validForm==true){
 // console.log("in else if ")
   
  let cnt =true;
-for(let i = 1 ; i <= Parked_car_detail.length;i++){
+for(let i = 0 ; i <=Parked_car_detail.length-1;i++){
   if(Parked_car_detail[i].isempty==true){
     car_detail = {
       isempty: false,
-      car_alotted: i,
+      car_alotted: i+1,
       ownerName: this.state.ownerName,
       carName: this.state.carName,
       numberPlate: this.state.numberPlate,
@@ -205,6 +256,7 @@ for(let i = 1 ; i <= Parked_car_detail.length;i++){
   break;
 
   }
+
 }
   if(cnt==true){
 // console.log("in if true ")
@@ -225,12 +277,34 @@ for(let i = 1 ; i <= Parked_car_detail.length;i++){
     this.setState({
       refereshed_details:Parked_car_detail_u
     })
+
+    this.setState({
+      ownerName: "",
+          carName: "",
+          numberPlate: "",
+          color: '',
+          SearchItem:'',
+      entryDate: new Date(),
+
+    
+    })
   }
+  this.setState({
+    ownerName: "",
+        carName: "",
+        numberPlate: "",
+        color: '',
+        SearchItem:'',
+      entryDate: new Date(),
+
   
+  })
 
 // console.log(Parked_car_detail)
 }
-e.preventDefault()
+
+}
+
 }
   
   remove_car(i){
@@ -271,18 +345,15 @@ e.preventDefault()
     // console.log(this.state.entryDate);
     // console.log(this.props.location.state)
     // this.alotDefaultParking();
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, "0");
-    var mm = String(today.getMonth() + 1).padStart(2, "0");
-    var yyyy = today.getFullYear();
-    today = yyyy + "-" + mm + "-" + dd;
+   
       var Parked_car_detail = JSON.parse(sessionStorage.getItem("car_parked"));
       if(Parked_car_detail==null){
         Parked_car_detail=[]
       }
+      // console.log("new dat is "+today)
 this.setState({
   refereshed_details:Parked_car_detail,
-  curDate: today
+  // curDate: today
 })
   }
   renderCarParkedDeatil = () => {
@@ -397,12 +468,13 @@ this.setState({
               <div class="col-6 form-group">
                 <label for="entryDate">Entry Date:</label>
                 <input
-                  type="date"
+                  type="text"
                   class="form-control rounded-1 shadow-sm"
                   name="entryDate" 
-                  min={this.state.curDate}
-                  value={this.state.curDate}
+                  // min={this.state.entryDate}
+                  value={this.state.entryDate}
                   onChange={this.submithandler}
+                  disabled
                 />
                 <span style={{ color: "red" }}> {this.state.DateError}</span>
               </div>
@@ -412,10 +484,12 @@ this.setState({
                 <label for="color">Color:</label>
                 <select
                   class="form-control rounded-1 shadow-sm"
-                  name="color"
+                  name="color" value={this.state.color}
                   onChange={this.submithandler}
                 >
-                  <option value="default"> select car color </option>
+                  {/* <option value="default"> </option> */}
+                  
+                  <option value=""> select car color </option>
                   <option value="red"> Red </option>
                   <option value="black"> Black </option>
                   <option value="white"> White </option>
@@ -443,7 +517,7 @@ this.setState({
             {/* <div className='row'> */}
             <form>
               <div className='form-group'>          
-                  <input type="text" className='form-control mb-2' name='SearchItem' value={this.state.SearchItem} onChange={(e)=>this.dynamicSearch(e)} placeholder="Search for car color"></input>
+                  <input type="text" autoComplete="off" className='form-control mb-2' name='SearchItem' value={this.state.SearchItem} onChange={(e)=>this.dynamicSearch(e)} placeholder="Search for car color"></input>
            
                   {/* <div class="col-12 form-group">
                 <select

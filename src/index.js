@@ -4,9 +4,8 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import App from './App.js';
-import Login from './Components/Login';
-import ParkCar from './Components/ParkCar';
-import AlotDefaultParking from './Components/AlotDefaultParking';
+
+
 
 
 // import AlotDefaultParking from './Components/AlotDefaultParking';
