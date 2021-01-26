@@ -35,6 +35,10 @@ class AlotDefaultParking extends Component {
   }
 
   dynamicNoplate = () => {
+    var one = String.fromCharCode(Math.floor(Math.random() * (88- 65 + 1)) + 65);
+    var one_n = String.fromCharCode(Math.floor(Math.random() * (80- 65 + 1)) + 65);
+
+
     var two = Math.floor(Math.random() * 50);
 
     var n = Math.floor(Math.random() * (88- 65 + 1)) + 65;
@@ -43,7 +47,7 @@ class AlotDefaultParking extends Component {
     var four = String.fromCharCode(n + Math.floor(Math.random() * 3));
 
     var no = Math.floor(Math.random() * 10000);
-    var noPlate = "MH-" + two + "-" + three + "" + "" + four + "-" + no;
+    var noPlate = one+""+one_n+"-" + two + "-" + three + "" + "" + four + "-" + no;
     return noPlate;
   };
 
